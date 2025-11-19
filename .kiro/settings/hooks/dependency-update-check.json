@@ -1,0 +1,14 @@
+{
+  "name": "Dependency Update Check",
+  "description": "Reviews package.json or requirements.txt changes for dependency best practices",
+  "trigger": {
+    "type": "onSave",
+    "filePattern": "**/{package.json,requirements.txt,Pipfile,Cargo.toml,go.mod,pom.xml,build.gradle}"
+  },
+  "prompt": "Analyze the dependency file changes:\n\n1. **Version Check**: Identify if dependencies are using latest stable versions\n2. **New Dependencies**: List any newly added dependencies\n3. **Removed Dependencies**: Note any removed dependencies\n4. **Security**: Flag any known vulnerable packages\n5. **Justification**: For new dependencies, assess if they provide clear value\n6. **Maintenance**: Check if packages are actively maintained\n\nProvide a concise report:\n- 📦 New: List new dependencies with brief purpose\n- ⬆️ Updated: List version changes\n- 🗑️ Removed: List removed dependencies\n- ⚠️ Concerns: Security or maintenance issues\n- 💡 Recommendations: Suggest alternatives or improvements\n\nKeep it brief - only highlight important findings.",
+  "context": [
+    "#File",
+    "#Git Diff"
+  ],
+  "autoRun": true
+}

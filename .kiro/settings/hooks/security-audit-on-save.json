@@ -1,0 +1,13 @@
+{
+  "name": "Security Audit on Save",
+  "description": "Checks for security issues when saving code files",
+  "trigger": {
+    "type": "onSave",
+    "filePattern": "**/*.{js,ts,py,java,go,rb,php,cs,cpp,c,h,hpp,jsx,tsx,vue,swift,kt,rs}"
+  },
+  "prompt": "Perform a quick security audit on the saved file:\n\n1. **Secrets Detection**: Scan for hardcoded API keys, passwords, tokens, or credentials\n2. **Input Validation**: Check if user inputs are properly validated\n3. **SQL Injection**: Look for string concatenation in database queries\n4. **Authentication/Authorization**: Verify proper access controls if applicable\n5. **Sensitive Data**: Check for unencrypted sensitive data handling\n6. **Dependencies**: Flag any known vulnerable packages if imports changed\n\nOnly report if you find actual security concerns. Keep the response concise:\n- 🔒 Secure: No issues found\n- ⚠️ Warning: Potential security concerns with specific line numbers and fixes\n- 🚨 Critical: Serious security vulnerabilities that must be addressed immediately",
+  "context": [
+    "#File"
+  ],
+  "autoRun": true
+}

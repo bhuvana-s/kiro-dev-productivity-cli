@@ -1,0 +1,57 @@
+Features in Kiro Developer Productivity Tool Wheel Package
+
+1. Log Analysis for Developer Productivity
+
+Analyses Amazon Q Developer logs stored locally on the developer’s machine.
+Allows the user to specify a date range (e.g., last 7 days) for analysis.
+Discovers and parses log files to extract relevant activity and usage data.
+
+2. Comprehensive Metrics Reporting
+
+Summarises key productivity metrics, including:
+
+Number of requests made to Amazon Q Developer.
+Number of conversations (chat windows) initiated.
+Average response time for agentic mode operations.
+Fastest and slowest response times for code generation.
+Total characters and request lengths processed.
+
+
+Tracks tool usage (e.g., which tools were invoked, how often).
+
+3. Code Generation and Activity Insights
+
+Reports on:
+
+Lines of code generated (overall and per programming language).
+Success rate of requests.
+Peak activity periods (when the developer was most active).
+Daily activity breakdown.
+
+
+
+4. Customisable Output
+
+Generates summary reports in a structured format (e.g., CSV or JSON).
+Enables aggregation and further analysis of metrics.
+
+5. CLI Commands and Usability
+
+Provides a set of CLI commands to:
+
+Show log patterns.
+Analyse logs for a specific period.
+Discover and process logs in a given directory.
+Run the tracker in the background or as needed.
+
+
+
+6. Local Storage and Privacy
+
+All analysis is performed locally; no data is sent externally.
+Metrics and reports are stored as JSON files on the developer’s machine for privacy and personal tracking.
+
+7. Extensibility
+
+The package is designed as a Python wheel (.whl), making it easy to install via pip install.
+Can be extended to support additional metrics or integrate with other tools as needed.

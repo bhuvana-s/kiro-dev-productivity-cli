@@ -1,0 +1,13 @@
+{
+  "name": "Test Best Practices Check",
+  "description": "Validates test files follow best practices before execution",
+  "trigger": {
+    "type": "manual",
+    "icon": "beaker"
+  },
+  "prompt": "Review the test file(s) and verify they follow testing best practices:\n\n1. **Test Organization**: Check if tests are well-organized with descriptive names\n2. **Output Management**: Verify tests use minimal verbosity flags (--silent, -q, etc.)\n3. **Performance**: Look for opportunities to use parallel execution or test filtering\n4. **Test Structure**: Ensure proper grouping and categorization (unit/integration/e2e)\n5. **Mocking**: Check if external dependencies are properly mocked\n6. **Assertions**: Verify tests have clear, focused assertions\n\nProvide:\n- ✅ Good practices found\n- 💡 Suggestions for improvement\n- 🚀 Performance optimization opportunities\n\nIf this is a test execution request, suggest the optimal command with appropriate flags.",
+  "context": [
+    "#File"
+  ],
+  "autoRun": false
+}

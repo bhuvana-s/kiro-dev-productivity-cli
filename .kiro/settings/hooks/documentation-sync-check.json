@@ -1,0 +1,14 @@
+{
+  "name": "Documentation Sync Check",
+  "description": "Ensures documentation stays in sync with code changes",
+  "trigger": {
+    "type": "manual",
+    "icon": "book"
+  },
+  "prompt": "Review recent changes and check if documentation needs updates:\n\n1. **API Changes**: Check if function signatures, endpoints, or interfaces changed\n2. **Configuration Changes**: Look for new environment variables or config options\n3. **Dependency Changes**: Check if setup instructions need updates\n4. **Feature Changes**: Identify new features that need documentation\n5. **README Coverage**: Verify README covers deployment, setup, and key features\n\nProvide:\n- 📝 Documentation Updates Needed: Specific sections to update\n- ✅ Documentation Current: If no updates needed\n- 💡 Suggestions: Additional documentation that would be helpful\n\nIf updates are needed, offer to help update the README or relevant docs.",
+  "context": [
+    "#Git Diff",
+    "#Folder"
+  ],
+  "autoRun": false
+}

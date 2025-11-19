@@ -1,0 +1,13 @@
+{
+  "name": "Pre-Commit Quality Check",
+  "description": "Enforces development standards before committing code",
+  "trigger": {
+    "type": "manual",
+    "icon": "shield-check"
+  },
+  "prompt": "Review the staged changes and verify they meet our development standards:\n\n1. **Dependency Management**: Check if any new dependencies are added. If so, verify they are latest stable versions and well-maintained.\n2. **Code Quality**: Look for duplicate files with suffixes like '_fixed', '_clean', '_backup' - flag these as violations.\n3. **File Management**: Ensure clean directory structure and consistent naming conventions.\n4. **Documentation**: Check if changes require README updates or inline documentation.\n5. **No Hardcoded Secrets**: Scan for API keys, passwords, or sensitive data.\n\nProvide a summary of findings with:\n- ✅ Passed checks\n- ⚠️ Warnings (should fix but not blocking)\n- ❌ Violations (must fix before commit)\n\nIf violations exist, suggest specific fixes.",
+  "context": [
+    "#Git Diff"
+  ],
+  "autoRun": false
+}

@@ -1,0 +1,254 @@
+# Implementation Plan
+
+- [x] 1. Set up project structure and packaging configuration
+  - Create directory structure with src/kiro_analyzer/ layout
+  - Write pyproject.toml with build configuration, dependencies, and CLI entry points
+  - Create setup.py for backward compatibility
+  - Add __init__.py files to make packages importable
+  - Create README.md with installation and usage instructions
+  - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
+
+- [ ] 2. Implement core data models and type definitions
+  - [ ] 2.1 Create data models module with dataclasses
+    - Define LogEntry dataclass with timestamp, event_type, data, raw_line, and source_file fields
+    - Define LogFileMetadata dataclass for file discovery
+    - Define ProductivityMetrics dataclass with all metric fields
+    - Define AnalyzerConfig dataclass for configuration management
+    - Add to_dict() and to_csv_rows() methods to ProductivityMetrics
+    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 3.1, 3.2, 3.3, 3.4, 3.5_
+  - [ ] 2.2 Define protocol interfaces for extensibility
+    - Create LogParser protocol with can_parse() and parse() methods
+    - Create MetricCalculator protocol with calculate() method
+    - Create CLICommand protocol with execute() method
+    - Create OutputFormatter protocol with formatting methods
+    - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
+
+- [ ] 3. Implement configuration management
+  - [ ] 3.1 Create ConfigManager class
+    - Implement load_config() to read from ~/.kiro-analyzer/config.json with defaults
+    - Implement save_config() to persist configuration
+    - Set default Kiro application folder path for macOS
+    - Handle missing config file gracefully with sensible defaults
+    - _Requirements: 1.2, 6.4, 8.5_
+
+- [ ] 4. Implement log discovery service
+  - [ ] 4.1 Create LogDiscoveryService class
+    - Implement discover_logs() to scan Kiro Application Folder recursively
+    - Filter files by extension (.log, .json) and naming patterns
+    - Extract file metadata (size, timestamps)
+    - Filter files by date range based on modification time
+    - Return list of LogFileMetadata objects
+    - _Requirements: 1.1, 1.3, 1.4, 6.4_
+  - [ ] 4.2 Implement get_log_patterns() method
+    - Return dictionary of recognized log file patterns and descriptions
+    - Include patterns for activity logs, metrics logs, and session logs
+    - _Requirements: 5.1_
+  - [ ]* 4.3 Add error handling for discovery failures
+    - Handle missing directory with clear error message
+    - Handle permission errors gracefully
+    - Log warnings for inaccessible files
+    - _Requirements: 1.5, 6.4_
+
+- [ ] 5. Implement log parsing service
+  - [ ] 5.1 Create base parser infrastructure
+    - Implement ParserRegistry class with register_parser() and get_parser() methods
+    - Create abstract base for common parsing utilities
+    - Implement streaming file reader for large files
+    - _Requirements: 8.1, 8.2, 8.4_
+  - [ ] 5.2 Implement JSONLogParser
+    - Parse JSON-formatted log files line by line
+    - Extract timestamp, event_type, and data fields
+    - Handle malformed JSON entries gracefully
+    - Yield LogEntry objects
+    - _Requirements: 1.1, 1.4_
+  - [ ] 5.3 Implement PlainTextLogParser
+    - Use regex patterns to parse structured text logs
+    - Extract timestamps and event information
+    - Support common log formats
+    - _Requirements: 1.1, 1.4_
+  - [ ] 5.4 Create ParserService orchestrator
+    - Implement parse_file() that selects appropriate parser
+    - Handle parsing errors and continue with remaining entries
+    - Return list of successfully parsed LogEntry objects
+    - _Requirements: 1.1, 1.4_
+
+- [ ] 6. Implement metric calculators
+  - [ ] 6.1 Create RequestCountCalculator
+    - Count total requests from log entries with event_type='request'
+    - Count total conversations from entries with event_type='conversation_start'
+    - Return dictionary with counts
+    - _Requirements: 2.1, 2.2_
+  - [ ] 6.2 Create ResponseTimeCalculator
+    - Extract response times from agentic mode operations
+    - Calculate average, minimum (fastest), and maximum (slowest) response times
+    - Handle missing or invalid response time data
+    - _Requirements: 2.3, 2.4, 2.5_
+  - [ ] 6.3 Create CodeGenerationCalculator
+    - Count total lines of code generated from log entries
+    - Categorize lines by programming language
+    - Calculate success rate from successful vs failed requests
+    - _Requirements: 3.1, 3.2, 3.3_
+  - [ ] 6.4 Create ToolUsageCalculator
+    - Track tool invocations from log entries
+    - Count frequency of each tool usage
+    - Return dictionary mapping tool names to counts
+    - _Requirements: 2.7_
+  - [ ] 6.5 Create ActivityPatternCalculator
+    - Analyze timestamp distributions to identify peak activity periods
+    - Generate daily breakdown of activity counts
+    - Identify 2-hour windows with highest activity
+    - _Requirements: 3.4, 3.5_
+  - [ ] 6.6 Calculate total characters processed
+    - Sum character counts from request data in log entries
+    - _Requirements: 2.6_
+
+- [ ] 7. Implement analyzer service
+  - [ ] 7.1 Create AnalyzerService class
+    - Initialize with list of MetricCalculator instances
+    - Implement analyze() method that runs all calculators
+    - Aggregate results into ProductivityMetrics object
+    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 3.1, 3.2, 3.3, 3.4, 3.5_
+  - [ ] 7.2 Implement date range filtering
+    - Create filter_by_date_range() method
+    - Filter LogEntry list by timestamp within start and end dates
+    - Handle timezone conversions if needed
+    - _Requirements: 1.1, 1.2, 1.4_
+  - [ ] 7.3 Implement metric aggregation logic
+    - Combine results from all calculators
+    - Handle missing or incomplete data gracefully
+    - Set default values for metrics that cannot be calculated
+    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 3.1, 3.2, 3.3, 3.4, 3.5_
+
+- [ ] 8. Implement reporter service
+  - [ ] 8.1 Create ReporterService class with format support
+    - Implement generate_report() with format parameter (JSON, CSV, CONSOLE)
+    - Route to appropriate formatter based on format type
+    - _Requirements: 4.1, 4.2_
+  - [ ] 8.2 Implement JSON report formatter
+    - Convert ProductivityMetrics to JSON structure
+    - Include metadata (generated_at, analysis_period)
+    - Format dates as ISO 8601 strings
+    - Return formatted JSON string
+    - _Requirements: 4.2_
+  - [ ] 8.3 Implement CSV report formatter
+    - Convert ProductivityMetrics to CSV rows
+    - Create metric_name, value, unit columns
+    - Handle nested data (lines_by_language, tool_usage) as separate rows
+    - Return formatted CSV string
+    - _Requirements: 4.1_
+  - [ ] 8.4 Implement console output formatter
+    - Use rich library to create formatted tables
+    - Display summary statistics in readable format
+    - Create ASCII charts for activity patterns
+    - _Requirements: 4.1, 4.2_
+  - [ ] 8.5 Implement file saving functionality
+    - Create save_report() method to write reports to disk
+    - Generate timestamped filenames to prevent overwriting
+    - Create output directory if it doesn't exist
+    - Handle custom output paths from user
+    - _Requirements: 4.3, 4.4, 4.5, 6.3_
+
+- [ ] 9. Implement CLI commands
+  - [ ] 9.1 Create main CLI entry point with Click
+    - Set up Click application with command groups
+    - Add global options (--verbose, --config)
+    - Implement version command
+    - Add help documentation
+    - _Requirements: 5.5, 5.6, 7.5_
+  - [ ] 9.2 Implement analyze command
+    - Add --start-date and --end-date options
+    - Add --output-format option (json, csv, console)
+    - Add --output-path option for custom save location
+    - Orchestrate discovery → parsing → analysis → reporting flow
+    - Display results or save to file based on options
+    - _Requirements: 1.1, 1.2, 1.4, 4.1, 4.2, 4.5, 5.2_
+  - [ ] 9.3 Implement discover command
+    - Add --directory option to specify custom path
+    - Call LogDiscoveryService to find log files
+    - Display list of discovered files with metadata
+    - _Requirements: 5.3_
+  - [ ] 9.4 Implement report command
+    - Add --period option (e.g., 7d, 30d, 90d)
+    - Add --output option for save path
+    - Convert period to date range
+    - Generate full metrics report
+    - _Requirements: 5.4_
+  - [ ] 9.5 Implement show-patterns command
+    - Call LogDiscoveryService.get_log_patterns()
+    - Display recognized log patterns in formatted table
+    - _Requirements: 5.1_
+
+- [ ] 10. Implement error handling and validation
+  - [ ] 10.1 Create custom exception hierarchy
+    - Define AnalyzerError base exception
+    - Define LogDiscoveryError, LogParsingError, MetricsCalculationError, ReportGenerationError
+    - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5_
+  - [ ] 10.2 Add error handling to discovery service
+    - Catch and wrap file system errors
+    - Provide actionable error messages for missing directories
+    - Handle permission errors gracefully
+    - _Requirements: 1.5, 6.1, 6.4_
+  - [ ] 10.3 Add error handling to parser service
+    - Catch parsing errors and log warnings
+    - Continue parsing remaining entries on error
+    - Track and report number of failed entries
+    - _Requirements: 1.5, 6.2_
+  - [ ] 10.4 Add validation to CLI commands
+    - Validate date formats and ranges
+    - Validate output format options
+    - Validate file paths
+    - Display helpful error messages for invalid inputs
+    - _Requirements: 5.6_
+
+- [ ] 11. Implement local storage and privacy features
+  - [ ] 11.1 Ensure all operations are local
+    - Verify no network calls in codebase
+    - Add comments documenting privacy guarantees
+    - _Requirements: 6.1, 6.2_
+  - [ ] 11.2 Implement secure report storage
+    - Save reports to ~/.kiro-analyzer/reports/ by default
+    - Set appropriate file permissions (user read/write only)
+    - _Requirements: 6.3, 6.5_
+
+- [ ] 12. Add extensibility support
+  - [ ] 12.1 Implement parser plugin system
+    - Support loading custom parsers from configuration
+    - Dynamically import parser classes
+    - Register custom parsers with ParserRegistry
+    - _Requirements: 8.1, 8.2, 8.3, 8.4_
+  - [ ] 12.2 Implement metric calculator plugin system
+    - Support registering custom calculators
+    - Allow enabling/disabling specific metrics via configuration
+    - _Requirements: 8.2, 8.5_
+  - [ ] 12.3 Document extension points
+    - Create examples of custom parsers and calculators
+    - Document plugin API in README
+    - _Requirements: 8.1, 8.2, 8.3_
+
+- [ ] 13. Create build and packaging scripts
+  - [ ] 13.1 Configure build system
+    - Verify pyproject.toml is complete
+    - Test wheel building with `python -m build`
+    - Verify CLI entry point is registered correctly
+    - _Requirements: 7.1, 7.2, 7.3, 7.4_
+  - [ ] 13.2 Create installation verification script
+    - Test pip install from wheel file
+    - Verify kiro-analyzer command is available
+    - Test basic command execution
+    - _Requirements: 7.2, 7.5_
+
+- [ ] 14. Integration and end-to-end testing
+  - [ ] 14.1 Create sample log files for testing
+    - Generate realistic test data covering all event types
+    - Include edge cases (empty logs, malformed entries)
+    - _Requirements: 1.1, 1.3, 1.4_
+  - [ ] 14.2 Test complete analysis workflow
+    - Run full pipeline from discovery to report generation
+    - Verify metrics calculations are accurate
+    - Test all output formats
+    - _Requirements: 1.1, 1.2, 1.4, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 3.1, 3.2, 3.3, 3.4, 3.5, 4.1, 4.2_
+  - [ ] 14.3 Test CLI commands end-to-end
+    - Execute each command with various options
+    - Verify output correctness
+    - Test error handling with invalid inputs
+    - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6_
