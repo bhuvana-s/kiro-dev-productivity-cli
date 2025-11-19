@@ -31,15 +31,15 @@
     - Handle missing config file gracefully with sensible defaults
     - _Requirements: 1.2, 6.4, 8.5_
 
-- [ ] 4. Implement log discovery service
-  - [ ] 4.1 Create LogDiscoveryService class
+- [x] 4. Implement log discovery service
+  - [x] 4.1 Create LogDiscoveryService class
     - Implement discover_logs() to scan Kiro Application Folder recursively
     - Filter files by extension (.log, .json) and naming patterns
     - Extract file metadata (size, timestamps)
     - Filter files by date range based on modification time
     - Return list of LogFileMetadata objects
     - _Requirements: 1.1, 1.3, 1.4, 6.4_
-  - [ ] 4.2 Implement get_log_patterns() method
+  - [x] 4.2 Implement get_log_patterns() method
     - Return dictionary of recognized log file patterns and descriptions
     - Include patterns for activity logs, metrics logs, and session logs
     - _Requirements: 5.1_
@@ -49,24 +49,24 @@
     - Log warnings for inaccessible files
     - _Requirements: 1.5, 6.4_
 
-- [ ] 5. Implement log parsing service
-  - [ ] 5.1 Create base parser infrastructure
+- [x] 5. Implement log parsing service
+  - [x] 5.1 Create base parser infrastructure
     - Implement ParserRegistry class with register_parser() and get_parser() methods
     - Create abstract base for common parsing utilities
     - Implement streaming file reader for large files
     - _Requirements: 8.1, 8.2, 8.4_
-  - [ ] 5.2 Implement JSONLogParser
+  - [x] 5.2 Implement JSONLogParser
     - Parse JSON-formatted log files line by line
     - Extract timestamp, event_type, and data fields
     - Handle malformed JSON entries gracefully
     - Yield LogEntry objects
     - _Requirements: 1.1, 1.4_
-  - [ ] 5.3 Implement PlainTextLogParser
+  - [x] 5.3 Implement PlainTextLogParser
     - Use regex patterns to parse structured text logs
     - Extract timestamps and event information
     - Support common log formats
     - _Requirements: 1.1, 1.4_
-  - [ ] 5.4 Create ParserService orchestrator
+  - [x] 5.4 Create ParserService orchestrator
     - Implement parse_file() that selects appropriate parser
     - Handle parsing errors and continue with remaining entries
     - Return list of successfully parsed LogEntry objects
