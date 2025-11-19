@@ -73,32 +73,32 @@
     - _Requirements: 1.1, 1.4_
 
 - [ ] 6. Implement metric calculators
-  - [ ] 6.1 Create RequestCountCalculator
+  - [x] 6.1 Create RequestCountCalculator
     - Count total requests from log entries with event_type='request'
     - Count total conversations from entries with event_type='conversation_start'
     - Return dictionary with counts
     - _Requirements: 2.1, 2.2_
-  - [ ] 6.2 Create ResponseTimeCalculator
+  - [x] 6.2 Create ResponseTimeCalculator
     - Extract response times from agentic mode operations
     - Calculate average, minimum (fastest), and maximum (slowest) response times
     - Handle missing or invalid response time data
     - _Requirements: 2.3, 2.4, 2.5_
-  - [ ] 6.3 Create CodeGenerationCalculator
+  - [x] 6.3 Create CodeGenerationCalculator
     - Count total lines of code generated from log entries
     - Categorize lines by programming language
     - Calculate success rate from successful vs failed requests
     - _Requirements: 3.1, 3.2, 3.3_
-  - [ ] 6.4 Create ToolUsageCalculator
+  - [x] 6.4 Create ToolUsageCalculator
     - Track tool invocations from log entries
     - Count frequency of each tool usage
     - Return dictionary mapping tool names to counts
     - _Requirements: 2.7_
-  - [ ] 6.5 Create ActivityPatternCalculator
+  - [x] 6.5 Create ActivityPatternCalculator
     - Analyze timestamp distributions to identify peak activity periods
     - Generate daily breakdown of activity counts
     - Identify 2-hour windows with highest activity
     - _Requirements: 3.4, 3.5_
-  - [ ] 6.6 Calculate total characters processed
+  - [x] 6.6 Calculate total characters processed
     - Sum character counts from request data in log entries
     - _Requirements: 2.6_
 

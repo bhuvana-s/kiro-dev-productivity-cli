@@ -24,11 +24,17 @@ class ParserService:
         
         Args:
             registry: ParserRegistry instance. If None, creates a new registry
-                     with default parsers (JSONLogParser and PlainTextLogParser)
+                     with default parsers (KiroLogParser, JSONLogParser, MarkdownParser, PlainTextLogParser)
         """
         if registry is None:
             registry = ParserRegistry()
-            # Register default parsers
+            # Register default parsers in priority order
+            # Kiro-specific parser first for best match
+            from .kiro_parser import KiroLogParser
+            from .markdown_parser import MarkdownParser
+            
+            registry.register_parser(KiroLogParser())
+            registry.register_parser(MarkdownParser())
             registry.register_parser(JSONLogParser())
             registry.register_parser(PlainTextLogParser())
         

@@ -19,12 +19,14 @@ class LogDiscoveryService:
     LOG_PATTERNS = {
         "*.log": "Plain text log files",
         "*.json": "JSON-formatted log files",
+        "*.md": "Markdown documentation files",
         "*activity*.log": "Activity tracking logs",
         "*activity*.json": "Activity tracking logs (JSON format)",
         "*metrics*.log": "Metrics and performance logs",
         "*metrics*.json": "Metrics and performance logs (JSON format)",
         "*session*.log": "Session information logs",
         "*session*.json": "Session information logs (JSON format)",
+        "README.md": "Project documentation",
     }
     
     def __init__(self, base_path: Optional[Path] = None):
@@ -111,8 +113,8 @@ class LogDiscoveryService:
         """
         filename = file_path.name.lower()
         
-        # Check for .log or .json extensions
-        if not (filename.endswith('.log') or filename.endswith('.json')):
+        # Check for .log, .json, or .md extensions
+        if not (filename.endswith('.log') or filename.endswith('.json') or filename.endswith('.md')):
             return False
         
         return True
@@ -149,16 +151,20 @@ class LogDiscoveryService:
             file_path: Path to the log file
             
         Returns:
-            String indicating file type ('activity', 'metrics', 'session', or 'general')
+            String indicating file type ('activity', 'metrics', 'session', 'documentation', or 'general')
         """
         filename_lower = file_path.name.lower()
         
-        if 'activity' in filename_lower:
+        if filename_lower.endswith('.md'):
+            return 'documentation'
+        elif 'activity' in filename_lower:
             return 'activity'
         elif 'metrics' in filename_lower:
             return 'metrics'
         elif 'session' in filename_lower:
             return 'session'
+        elif 'kiro' in filename_lower.lower() or 'q-client' in filename_lower:
+            return 'kiro_agent'
         else:
             return 'general'
     

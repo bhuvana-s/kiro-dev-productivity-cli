@@ -14,6 +14,8 @@ The Kiro Activity Analyzer is a developer productivity tool that enables develop
 - **Agentic Mode**: Kiro's autonomous operation mode where the AI agent performs tasks independently
 - **Tool Invocation**: An instance where Kiro uses a specific tool or function during operation
 - **Activity Period**: A time window during which the developer was actively using Kiro
+- **Project**: A workspace or codebase that the developer works on using Kiro, identified by workspace path or project name
+- **Project Metrics**: Productivity statistics calculated specifically for a single project or workspace
 
 ## Requirements
 
@@ -115,3 +117,30 @@ The Kiro Activity Analyzer is a developer productivity tool that enables develop
 3. THE CLI Tool SHALL support plugin-style extensions for custom analysis modules
 4. WHERE new log formats are introduced, THE CLI Tool SHALL allow registration of custom parsers
 5. THE CLI Tool SHALL provide configuration options for enabling or disabling specific metrics
+
+### Requirement 9
+
+**User Story:** As a developer, I want to see metrics broken down by project, so that I can understand my productivity patterns across different codebases
+
+#### Acceptance Criteria
+
+1. THE CLI Tool SHALL extract project or workspace information from log entries
+2. THE CLI Tool SHALL provide a command to list all projects that have been worked on during the analyzed period
+3. WHEN analyzing logs, THE CLI Tool SHALL group metrics by project identifier
+4. THE CLI Tool SHALL calculate all standard metrics on a per-project basis
+5. THE CLI Tool SHALL generate daily breakdowns for each project showing activity per day
+6. WHERE a developer specifies a project filter, THE CLI Tool SHALL display metrics only for that project
+7. WHEN displaying project metrics, THE CLI Tool SHALL show project name, total activity, and key productivity indicators
+
+### Requirement 10
+
+**User Story:** As a developer, I want to track which LLM models I'm using with Kiro, so that I can understand my AI assistant configuration and usage patterns
+
+#### Acceptance Criteria
+
+1. THE CLI Tool SHALL extract the configured LLM model from Kiro settings.json
+2. THE CLI Tool SHALL extract the agent-specific model selection from Kiro settings
+3. THE CLI Tool SHALL track which models were actually used in log entries
+4. THE CLI Tool SHALL count the frequency of each model usage from logs
+5. WHEN displaying metrics, THE CLI Tool SHALL show both configured and actual model usage
+6. THE CLI Tool SHALL display the agent autonomy mode (Supervised, Autopilot) from settings

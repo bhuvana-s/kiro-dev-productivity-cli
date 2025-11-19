@@ -4,6 +4,8 @@ from .registry import ParserRegistry
 from .base import stream_file_lines, ParsingUtilities
 from .json_parser import JSONLogParser
 from .text_parser import PlainTextLogParser
+from .kiro_parser import KiroLogParser
+from .markdown_parser import MarkdownParser
 from .parser_service import ParserService
 
 __all__ = [
@@ -12,5 +14,7 @@ __all__ = [
     'ParsingUtilities',
     'JSONLogParser',
     'PlainTextLogParser',
+    'KiroLogParser',
+    'MarkdownParser',
     'ParserService'
 ]
