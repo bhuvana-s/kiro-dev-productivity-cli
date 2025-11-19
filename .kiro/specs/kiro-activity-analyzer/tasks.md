@@ -23,8 +23,8 @@
     - Create OutputFormatter protocol with formatting methods
     - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
 
-- [ ] 3. Implement configuration management
-  - [ ] 3.1 Create ConfigManager class
+- [x] 3. Implement configuration management
+  - [x] 3.1 Create ConfigManager class
     - Implement load_config() to read from ~/.kiro-analyzer/config.json with defaults
     - Implement save_config() to persist configuration
     - Set default Kiro application folder path for macOS
